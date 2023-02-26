@@ -82,33 +82,6 @@ close connection.
 save response to cache.
 ```
 
-可以看出，`web cache server` 先会查找 `cache`，如果不存在，转发 `http request`，再将收到的 `http response` 转发回 `client`，并将内容存储到 `cache` 中。
-
-`wireshark` 抓包信息，符合预期
-
-![image-20220606112403525](C:\Users\vinkle\AppData\Roaming\Typora\typora-user-images\image-20220606112403525.png)
-
-查看获取文件和源文件属性，数据一致，说明文件获取没有问题
-
-<table rules="none" align="center">
-	<tr>
-		<td>
-			<center>
-				<img src="C:\Users\vinkle\AppData\Roaming\Typora\typora-user-images\image-20220606113121750.png" width="60%" />
-				<br/>
-				<font color="AAAAAA">源文件属性</font>
-			</center>
-		</td>
-		<td>
-			<center>
-				<img src="C:\Users\vinkle\AppData\Roaming\Typora\typora-user-images\image-20220606113146369.png" width="60%" />
-				<br/>
-				<font color="AAAAAA">获取到的文件属性</font>
-			</center>
-		</td>
-	</tr>
-</table>
-
 #### 第二次获取文件：发送 `conditional GET`，无修改返回 `cache`
 
 使用 `curl` 获取本地服务器的 `test.png` 文件
@@ -150,37 +123,6 @@ send conditional get request...
 get response not modified
 send cache to client...
 ```
-
-可以看出，`web cache server` 先查找 `cache`，再根据 `cache` 中的 `Date` 字段数据发送 `conditional GET` 请求，`web cache server` 接收到服务器的 `HTTP 304 Not Modified` 回复后，发送 `cache` 至 `client`。
-
-`wireshark` 抓包信息，符合预期
-
-![image-20220606114737379](C:\Users\vinkle\AppData\Roaming\Typora\typora-user-images\image-20220606114737379.png)
-
-`conditional GET` 信息，符合预期
-
-<img src="C:\Users\vinkle\AppData\Roaming\Typora\typora-user-images\image-20220606114821304.png" alt="image-20220606114821304" style="zoom:50%;" />
-
-查看获取文件和源文件属性，数据一致，说明文件获取没有问题
-
-<table rules="none" align="center">
-	<tr>
-		<td>
-			<center>
-				<img src="C:\Users\vinkle\AppData\Roaming\Typora\typora-user-images\image-20220606113121750.png" width="60%" />
-				<br/>
-				<font color="AAAAAA">源文件属性</font>
-			</center>
-		</td>
-		<td>
-			<center>
-				<img src="C:\Users\vinkle\AppData\Roaming\Typora\typora-user-images\image-20220606121301985.png" width="60%" />
-				<br/>
-				<font color="AAAAAA">获取到的文件属性</font>
-			</center>
-		</td>
-	</tr>
-</table>
 
 ### 采用condition GET 更新 cache
 
@@ -232,41 +174,6 @@ get response modified
 send response to client...
 rewrite the cache.
 ```
-
-可以看出，`web cache server` 先查找 `cache`，再根据 `cache` 中的 `Date` 字段数据发送 `conditional GET` 请求，由于文件已经更改，服务器重新发送文件，`web cache server` 接受文件后转发回 `client` 并重新写入 `cache`。
-
-`wireshark` 抓包信息，符合预期
-
-![image-20220606122154160](C:\Users\vinkle\AppData\Roaming\Typora\typora-user-images\image-20220606122154160.png)
-
-`conditional GET` 请求信息，符合预期
-
-<img src="C:\Users\vinkle\AppData\Roaming\Typora\typora-user-images\image-20220606122233376.png" alt="image-20220606122233376" style="zoom:50%;" />
-
-`conditional GET` 回复信息，符合预期
-
-<img src="C:\Users\vinkle\AppData\Roaming\Typora\typora-user-images\image-20220606122301707.png" alt="image-20220606122301707" style="zoom:50%;" />
-
-查看获取文件和源文件属性，数据一致，说明文件获取没有问题
-
-<table rules="none" align="center">
-	<tr>
-		<td>
-			<center>
-				<img src="C:\Users\vinkle\AppData\Roaming\Typora\typora-user-images\image-20220606122623499.png" width="60%" />
-				<br/>
-				<font color="AAAAAA">源文件属性</font>
-			</center>
-		</td>
-		<td>
-			<center>
-				<img src="C:\Users\vinkle\AppData\Roaming\Typora\typora-user-images\image-20220606122601196.png" width="60%" />
-				<br/>
-				<font color="AAAAAA">获取到的文件属性</font>
-			</center>
-		</td>
-	</tr>
-</table>
 
 ## 项目文档
 
